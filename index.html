@@ -1,14 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
   <head>
-    <base target="_top" />
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-    />
-    <title>Promotion Form Submission</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knowledge Center - Home</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,779 +12,466 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
     />
+    <style>
+      :root {
+        --primary: #102c57;
+        --secondary: #2d6a91;
+        --accent: #4a9dff;
+        --light: #f8f9fa;
+        --dark: #212529;
+      }
 
-    <link rel="stylesheet" href="asset/css/style.css" />
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.min.js"></script>
+      .navbar {
+        background: var(--primary);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-section {
+        background: linear-gradient(
+            rgba(16, 44, 87, 0.9),
+            rgba(16, 44, 87, 0.8)
+          ),
+          url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23102c57" width="1200" height="800"/><path fill="%232d6a91" d="M0,0 L1200,800 L0,800 Z"/></svg>');
+        background-size: cover;
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .card-menu {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      .card-menu:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+      }
+
+      .card-home {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      }
+
+      .card-dashboard {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      }
+
+      .card-guidance {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      }
+
+      .btn-primary-custom {
+        color: antiquewhite;
+        background: var(--primary);
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary-custom:hover {
+        background: var(--secondary);
+        transform: scale(1.05);
+      }
+
+      .footer {
+        background: var(--dark);
+        color: white;
+        padding: 2rem 0;
+        margin-top: 4rem;
+      }
+
+      .feature-highlight {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+      }
+
+      .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+      }
+    </style>
   </head>
   <body>
-    <div
-      id="page-loader"
-      class="d-flex flex-column justify-content-center align-items-center"
-    >
-      <div
-        class="spinner-border text-light"
-        role="status"
-        style="width: 3rem; height: 3rem; margin-bottom: 20px"
-      >
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <i
+            class="bi bi-journal-bookmark-fill me-2"
+            style="font-size: 1.8rem"
+          ></i>
+          <span class="fw-bold">Knowledge Center</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto" id="navMenu">
+            <!-- Menu akan diisi secara dinamis -->
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Sales & Store Knowledge Center</h1>
+        <p class="lead mb-4">
+          Platform terpadu untuk meningkatkan pengetahuan sales person dan
+          informasi store terkini
+        </p>
+        <a href="#menu-cards" class="btn btn-light btn-lg px-4">
+          <i class="bi bi-arrow-down-circle me-2"></i>Explore Menu
+        </a>
+      </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-
-      <div
-        id="loading-message"
-        class="text-white mb-2"
-        style="font-size: 0.9rem"
-      >
-        Checking cache...
-      </div>
-
-      <div
-        id="loading-percentage"
-        class="text-white mb-1"
-        style="font-size: 0.8rem; font-weight: bold"
-      >
-        10%
-      </div>
-
-      <div class="progress" style="width: 250px; height: 10px">
-        <div
-          id="loading-progress-bar"
-          class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
-          role="progressbar"
-          style="width: 10%"
-          aria-valuenow="10"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        ></div>
-      </div>
+      <p class="mt-2 text-muted">Memuat menu...</p>
     </div>
-    <div class="container py-3">
-      <img
-        class="header-img mb-3"
-        src="https://lh3.googleusercontent.com/d/1iYD1JrKvnUVQ70QSQWiYaEk_EPY3uJoP"
-        alt="Header Image"
-      />
 
-      <div class="card card-custom p-3">
-        <h1 class="card-title h5">Promotion Submission</h1>
-        <p class="card-text text-muted mb-3">
-          Isi form ini lewat HP. Tekan Dashboard untuk lihat progress
-          submission.
-        </p>
-
-        <form id="submissionForm">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="salesName" class="form-label">Sales Name</label>
-              <input
-                id="salesName"
-                type="text"
-                class="form-control"
-                placeholder="Start typing sales name..."
-                autocomplete="off"
-                required
-              />
-              <div id="autocomplete-results"></div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label for="salperId" class="form-label">Salper ID</label>
-              <input
-                id="salperId"
-                type="text"
-                class="form-control"
-                readonly
-                placeholder="Will be filled when you pick a name"
-              />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="category" class="form-label">Category</label>
-              <select id="category" class="form-select" required>
-                <option value="">-- choose category --</option>
-              </select>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label for="promotionTitle" class="form-label"
-                >Promotion Title</label
-              >
-              <select id="promotionTitle" class="form-select" required>
-                <option value="">-- choose promotion --</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="comment" class="form-label">Comment (optional)</label>
-            <textarea
-              id="comment"
-              class="form-control"
-              rows="3"
-              placeholder="Add a note..."
-            ></textarea>
-          </div>
-
-          <div class="mb-3">
-            <label for="imageInput" class="form-label"
-              >Upload Image (Mandatory)</label
-            >
-            <input
-              id="imageInput"
-              type="file"
-              class="form-control"
-              accept="image/*"
-            />
-          </div>
-
-          <div class="mb-3 text-center" id="previewContainer">
-            <div class="preview-wrapper">
-              <img
-                id="imagePreview"
-                alt="Image Preview"
-                class="img-fluid rounded shadow-sm"
-                style="max-height: 200px; width: auto; object-fit: contain"
-              />
-              <button
-                type="button"
-                class="btn-remove-image"
-                onclick="removeImage()"
-              >
-                <i class="bi bi-x"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="d-flex gap-2 mt-4">
-            <button
-              id="submitBtn"
-              class="btn btn-primary btn-lg flex-grow-1"
-              type="submit"
-              style="width: 70%"
-            >
-              Submit
-            </button>
-
-            <a
-              id="openDashboard"
-              class="btn btn-outline-primary w-25 d-flex align-items-center justify-content-center"
-              target="_blank"
-              style="min-width: 100px"
-            >
-              <i class="bi bi-house me-1 gohome-icon"></i>
-              Dashboard
-            </a>
-          </div>
-        </form>
-
-        <div class="meta" id="statusArea"></div>
+    <!-- Main Menu Cards -->
+    <section id="menu-cards" class="container mb-5">
+      <div class="row g-4" id="menuCardsContainer">
+        <!-- Cards akan diisi secara dinamis oleh JavaScript -->
       </div>
-    </div>
+    </section>
+
+    <!-- Features Highlight -->
+    <section class="container">
+      <div class="feature-highlight">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h2 class="h3 mb-3">Tingkatkan Pengetahuan & Performa Tim Sales</h2>
+            <p class="mb-4">
+              Knowledge Center ini dirancang khusus untuk mendukung perkembangan
+              pengetahuan sales person dan menyediakan informasi store yang
+              terupdate. Dengan akses mudah ke materi pembelajaran dan dashboard
+              performa, tim sales dapat terus berkembang dan mencapai target
+              yang lebih baik.
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Materi Terupdate</span
+              >
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Akses Mudah</span
+              >
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Interface
+                Responsif</span
+              >
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Data Real-time</span
+              >
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <i
+              class="bi bi-bar-chart-fill"
+              style="font-size: 5rem; color: var(--primary)"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="mb-3">Knowledge Center</h5>
+            <p>
+              Platform terpadu untuk pengembangan pengetahuan sales person dan
+              informasi store.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <h5 class="mb-3">Quick Links</h5>
+            <ul class="list-unstyled" id="footerLinks">
+              <!-- Links akan diisi secara dinamis -->
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <h5 class="mb-3">Kontak</h5>
+            <ul class="list-unstyled">
+              <li>
+                <i class="bi bi-envelope me-2"></i> info@knowledgecenter.com
+              </li>
+              <li><i class="bi bi-telephone me-2"></i> (021) 1234-5678</li>
+            </ul>
+          </div>
+        </div>
+        <hr class="my-4 bg-light" />
+        <div class="text-center">
+          <p class="mb-0">&copy; 2024 Knowledge Center. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      // CONFIG - GANTI DENGAN URL GAS ANDA
+      // ⭐️ GANTI DENGAN URL GAS WEB APP ANDA
       const GAS_WEB_APP_URL =
-        "https://script.google.com/macros/s/AKfycbykARSnuRADfneFHty8Dlzj1EXvOAOBbrYkW-JPXjdRRQXS_87Er_fQaB-rEccbuCEI/exec"; // GANTI INI
+        "https://script.google.com/macros/s/AKfycbykARSnuRADfneFHty8Dlzj1EXvOAOBbrYkW-JPXjdRRQXS_87Er_fQaB-rEccbuCEI/exec";
 
       // KONSTANTA CACHING
-      const CACHE_KEY = "promotionFormData";
-      const LAST_FETCH_TIME_KEY = "lastFetchTime";
+      const CACHE_KEY_MENU = "routingMenuData";
+      const LAST_FETCH_TIME_KEY_MENU = "lastFetchTimeMenu";
       // Data dianggap kedaluwarsa setelah 1 jam (dalam milidetik)
       const CACHE_EXPIRY_MS = 60 * 60 * 1000; // 1 jam
 
-      let EMP = [];
-      let categories = [];
-      let promotions = [];
-      let selectedImageData = "";
+      // Mapping icon untuk setiap menu
+      const menuIcons = {
+        Home: "bi-house-door-fill",
+        Dashboard: "bi-speedometer2",
+        "Guidance Material": "bi-journal-text",
+      };
 
-      // ⭐️ DEKLARASI GLOBAL UNTUK INPUT ELEMENTS (Fix ReferenceError)
-      // Variabel ini dideklarasikan dan diinisialisasi di sini karena elemen DOM sudah siap
-      const salesNameInput = document.getElementById("salesName");
-      const salperIdInput = document.getElementById("salperId");
-      const categorySelect = document.getElementById("category");
+      // Mapping class warna untuk card
+      const cardClasses = {
+        Home: "card-home",
+        Dashboard: "card-dashboard",
+        "Guidance Material": "card-guidance",
+      };
 
-      /**
-       * Fungsi untuk memperbarui tampilan loader (pesan, progress bar, dan persentase).
-       */
-      /**
-       * Fungsi untuk memperbarui tampilan loader (pesan, progress bar, dan persentase) secara bertahap.
-       * @param {string} message - Pesan status baru.
-       * @param {number} finalProgress - Nilai target progress (0-100).
-       * @param {number} duration - Durasi transisi dalam ms (default 500ms).
-       */
-      function updateLoader(message, finalProgress, duration = 500) {
-        const msgElement = document.getElementById("loading-message");
-        const barElement = document.getElementById("loading-progress-bar");
-        const percentElement = document.getElementById("loading-percentage");
-
-        if (msgElement) msgElement.textContent = message;
-
-        if (barElement) {
-          let currentProgress = parseInt(
-            barElement.getAttribute("aria-valuenow") || 0
-          );
-
-          // Cek jika progress baru lebih kecil dari yang sekarang (hindari mundur)
-          if (finalProgress < currentProgress) {
-            finalProgress = currentProgress;
-          }
-
-          // Hitung langkah kecil dan interval waktu
-          const step = (finalProgress - currentProgress) / (duration / 50); // Langkah per 50ms
-
-          const interval = setInterval(() => {
-            currentProgress += step;
-
-            if (currentProgress >= finalProgress) {
-              currentProgress = finalProgress;
-              clearInterval(interval);
-            }
-
-            const roundedProgress = Math.round(currentProgress);
-
-            barElement.style.width = currentProgress + "%";
-            barElement.setAttribute("aria-valuenow", roundedProgress);
-
-            if (percentElement) {
-              percentElement.textContent = roundedProgress + "%";
-            }
-          }, 50);
-        }
-      }
+      // ----------------------------------------------------
+      // FUNGSI UTAMA: LOGIC CACHING & BACKGROUND FETCH
+      // ----------------------------------------------------
 
       /**
-       * Menyembunyikan overlay loading setelah semua data siap.
+       * Mengambil data menu. Mengutamakan cache. Jika cache expired,
+       * mengembalikan data cache lama, dan memicu fetch baru di background.
+       * @returns {Promise<Array>} Array data menu.
        */
-      function hideLoader() {
-        const loader = document.getElementById("page-loader");
-        if (loader) {
-          // Animasi progress bar ke 100% sebelum fade out
-          updateLoader("Done!", 100);
-
-          // Tambahkan kelas untuk fade-out dan menyembunyikan
-          loader.classList.add("loader-hidden");
-
-          // Opsional: Hapus elemen dari DOM setelah animasi selesai (500ms)
-          setTimeout(() => {
-            loader.remove();
-          }, 500);
-        }
-      }
-
-      /**
-       * Fungsi utama untuk inisialisasi, termasuk logika caching.
-       */
-      async function init() {
-        // AWAL: Tampilkan progress saat mengecek cache
-        updateLoader("Checking cache...", 15); // Start di 15%
-
-        // 1. Cek Data di Local Storage
-        const cachedData = localStorage.getItem(CACHE_KEY);
-        const lastFetch = localStorage.getItem(LAST_FETCH_TIME_KEY);
+      async function fetchMenuData() {
+        const cachedData = localStorage.getItem(CACHE_KEY_MENU);
+        const lastFetch = localStorage.getItem(LAST_FETCH_TIME_KEY_MENU);
         const currentTime = new Date().getTime();
-
-        let shouldFetch = true;
+        let menuData = [];
+        let isCacheValid = false;
 
         if (cachedData && lastFetch) {
           const timeElapsed = currentTime - parseInt(lastFetch);
 
-          // Cek jika data belum kedaluwarsa
-          if (timeElapsed < CACHE_EXPIRY_MS) {
-            try {
-              const data = JSON.parse(cachedData);
-
-              // Gunakan Data Cache
-              EMP = data.empList || [];
-              categories = data.categories || [];
-              promotions = data.promotions || [];
-              shouldFetch = false;
-
-              updateLoader("Cache loaded successfully.", 90); // Lompat ke 90%
-            } catch (e) {
-              console.error("Error parsing cached data:", e);
-            }
-          } else {
-            updateLoader("Cache expired. Preparing to fetch new data...", 30); // Lompat ke 30%
-            // Hapus cache lama (opsional)
-            localStorage.removeItem(CACHE_KEY);
-            localStorage.removeItem(LAST_FETCH_TIME_KEY);
-          }
-        } else {
-          updateLoader("No cache found. Starting data fetch...", 30); // Lompat ke 30%
-        }
-
-        // 2. Fetch ke Server HANYA jika diperlukan
-        if (shouldFetch) {
           try {
-            // Update progress saat fetch dimulai
-            updateLoader("Fetching data from server...", 80); // Lompat ke 80%
+            const parsedData = JSON.parse(cachedData);
+            menuData = parsedData.data || [];
 
-            // Get data from Google Apps Script
-            const dataResponse = await fetch(GAS_WEB_APP_URL);
-            if (!dataResponse.ok) {
-              throw new Error(`HTTP error! status: ${dataResponse.status}`);
+            if (menuData.length > 0) {
+              isCacheValid = timeElapsed < CACHE_EXPIRY_MS;
+
+              // ⭐️ SELALU KEMBALIKAN DATA CACHE LAMA TERLEBIH DAHULU
+              if (isCacheValid || timeElapsed < CACHE_EXPIRY_MS * 2) {
+                console.log(`Menu loaded from cache. Valid: ${isCacheValid}`);
+                return menuData;
+              }
             }
-            const data = await dataResponse.json();
-
-            EMP = data.empList || [];
-            categories = data.categories || [];
-            promotions = data.promotions || [];
-
-            // 3. Simpan Data Baru ke Local Storage
-            if (EMP.length > 0) {
-              localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-              localStorage.setItem(LAST_FETCH_TIME_KEY, currentTime.toString());
-              updateLoader("Data received and saved.", 90); // Lompat ke 90%
-            }
-          } catch (error) {
-            console.error("Error loading data:", error);
-            Swal.fire({
-              icon: "error",
-              title: "Connection Error",
-              text: "Cannot connect to server. Please check the GAS_WEB_APP_URL configuration.",
-            });
+          } catch (e) {
+            console.error("Error parsing cached menu data.");
           }
         }
 
-        // Update progress saat data diolah dan form diisi
-        updateLoader("Populating form...", 95); // Lompat ke 95%
-
-        // 4. Lanjutkan inisialisasi dengan data yang sudah didapatkan
-        populateSelect("category", categories);
-        populateSelect("promotionTitle", promotions);
-        setupAutocomplete();
-
-        // Set dashboard URL
-        document.getElementById("openDashboard").href = "dashboard.html";
-
-        document
-          .getElementById("imageInput")
-          .addEventListener("change", handleImageSelect);
-        document
-          .getElementById("submissionForm")
-          .addEventListener("submit", onSubmitClick);
-
-        // Panggil hideLoader setelah SEMUA inisialisasi selesai di init()
-        hideLoader();
-
-        // ⭐️ LOGIC: Force Input ke Huruf Besar saat mengetik (listener yang sudah ada)
-        salesNameInput.addEventListener("input", function () {
-          this.value = this.value.toUpperCase();
-        });
-
-        salperIdInput.addEventListener("input", function () {
-          if (!this.readOnly) {
-            this.value = this.value.toUpperCase();
-          }
-        });
-      }
-      /**
-       * Mengisi elemen <select> dengan array data.
-       */
-      function populateSelect(id, arr) {
-        const sel = document.getElementById(id);
-        // Clear existing options except first one
-        while (sel.options.length > 1) {
-          sel.remove(1);
-        }
-
-        arr.forEach((v) => {
-          const opt = document.createElement("option");
-          opt.value = v;
-          opt.textContent = v;
-          sel.appendChild(opt);
-        });
+        // ⭐️ Jika tidak ada cache atau cache expired, fetch data baru (baik foreground/background)
+        return fetchNewMenuData(menuData);
       }
 
       /**
-       * Menangani pemilihan file gambar dan menampilkan preview.
+       * Melakukan fetch data baru dari GAS dan mengupdate cache.
+       * @param {Array} fallbackData Data lama untuk ditampilkan jika fetch gagal.
        */
-      // Data kompresi yang diinginkan
-      const COMPRESS_QUALITY = 0.7; // Kualitas 70% (0.0 - 1.0)
-      const MAX_WIDTH = 1200; // Maksimal lebar gambar 1200px
+      async function fetchNewMenuData(fallbackData = []) {
+        try {
+          const response = await fetch(`${GAS_WEB_APP_URL}?action=get_menu`);
+          const result = await response.json();
 
-      /**
-       * Menangani pemilihan file gambar, validasi, dan kompresi sebelum menampilkan preview.
-       * @param {Event} e - Event perubahan input file.
-       */
-      async function handleImageSelect(e) {
-        // Tambahkan 'async' di sini
-        const file = e.target.files[0];
-        const preview = document.getElementById("imagePreview");
-        const container = document.getElementById("previewContainer");
-
-        if (!file) {
-          removeImage();
-          return;
-        }
-
-        // Validasi file gambar
-        if (!file.type.startsWith("image/")) {
-          // ... (Error handling remains) ...
-          Swal.fire({
-            icon: "error",
-            title: "File Tidak Valid",
-            text: "File yang dipilih bukan gambar.",
-            confirmButtonText: "OK",
-          });
-          removeImage();
-          return;
-        }
-
-        // Catatan: Validasi ukuran file (max 5MB) masih perlu dipertahankan jika Anda ingin mencegah file super besar yang dapat crash browser.
-        if (file.size > 5 * 1024 * 1024) {
-          Swal.fire({
-            icon: "error",
-            title: "File Terlalu Besar",
-            text: "Ukuran file maksimal 5MB (sebelum kompresi).",
-            confirmButtonText: "OK",
-          });
-          removeImage();
-          return;
-        }
-
-        // Gunakan FileReader untuk mendapatkan data Base64 mentah
-        const reader = new FileReader();
-
-        reader.onload = async function (evt) {
-          // Tambahkan 'async' di sini
-          const rawBase64 = evt.target.result;
-
-          // ⭐️ Panggil fungsi kompresi dan tunggu hasilnya
-          const compressedBase64 = await compressImage(
-            rawBase64,
-            COMPRESS_QUALITY,
-            MAX_WIDTH
-          );
-
-          // Tampilkan preview menggunakan data yang sudah dikompresi
-          preview.src = compressedBase64;
-          container.style.display = "block";
-
-          // SIMPAN DATA GAMBAR KOMPRESI untuk submit
-          selectedImageData = compressedBase64;
-        };
-        reader.readAsDataURL(file);
-      }
-
-      /**
-       * Menghapus gambar yang sudah di-upload dan menyembunyikan preview.
-       */
-      function removeImage() {
-        // Reset input file
-        document.getElementById("imageInput").value = "";
-
-        // Sembunyikan preview
-        const preview = document.getElementById("imagePreview");
-        const container = document.getElementById("previewContainer");
-        preview.src = "";
-        container.style.display = "none";
-
-        // Hapus data gambar yang tersimpan
-        selectedImageData = "";
-      }
-
-      /**
-       * Mengatur fungsionalitas Autocomplete untuk kolom Sales Name.
-       */
-      function setupAutocomplete() {
-        const input = document.getElementById("salesName");
-        const acContainer = document.getElementById("autocomplete-results");
-
-        const list = document.createElement("div");
-        list.className = "autocomplete-list";
-        list.style.display = "none";
-        acContainer.appendChild(list);
-
-        // Fungsi untuk mengaktifkan input Salper ID dan Category dropdown
-        function enableManualInput() {
-          salperIdInput.readOnly = false;
-          salperIdInput.placeholder =
-            "Isi Salper ID secara manual atau tanda '-' jika tidak ada";
-          categorySelect.disabled = false;
-        }
-
-        // Fungsi untuk mengunci input Salper ID dan Category dropdown (setelah memilih dari saran)
-        function lockInputs() {
-          salperIdInput.readOnly = true;
-          categorySelect.disabled = true;
-        }
-
-        // --- Listener utama untuk input nama ---
-        input.addEventListener("input", function () {
-          const q = this.value.trim().toLowerCase();
-
-          // 1. Reset dan Kunci sementara
-          salperIdInput.value = "";
-          categorySelect.selectedIndex = 0; // Reset category
-          lockInputs();
-
-          if (!q) {
-            list.style.display = "none";
-            return;
-          }
-
-          const matches = EMP.filter((e) =>
-            (e.name || "").toLowerCase().includes(q)
-          ).slice(0, 20);
-
-          if (matches.length === 0) {
-            // 2. LOGIC: Nama tidak ditemukan, izinkan input manual
-            list.innerHTML = `<button type="button" class="list-group-item list-group-item-action disabled">Nama tidak ditemukan. Isi manual di bawah.</button>`;
-            enableManualInput(); // Aktifkan input Salper ID dan Category
-          } else {
-            // 3. Nama ditemukan, tampilkan saran dan pastikan input terkunci
-            list.innerHTML = "";
-            lockInputs(); // Pastikan input terkunci jika ada saran
-
-            matches.forEach((m) => {
-              const item = document.createElement("button");
-              item.type = "button";
-              item.className = "list-group-item list-group-item-action";
-
-              // Tampilkan Nama dan ID
-              item.textContent = m.name + (m.id ? " — " + m.id : "");
-
-              item.addEventListener("click", function () {
-                // Ketika item dipilih:
-                input.value = m.name.toUpperCase();
-                salperIdInput.value = m.id.toUpperCase();
-                list.style.display = "none";
-                lockInputs(); // Kunci kembali setelah pemilihan
-
-                // **LOGIC PENTING: Isi Category otomatis**
-                // Cari dan pilih opsi kategori yang sesuai dengan m.category
-                for (let i = 0; i < categorySelect.options.length; i++) {
-                  if (categorySelect.options[i].value === m.category) {
-                    categorySelect.selectedIndex = i;
-                    break;
-                  }
-                }
-              });
-              list.appendChild(item);
-            });
-          }
-          list.style.display = "block";
-        });
-
-        // Menyembunyikan daftar saat input kehilangan fokus
-        input.addEventListener("blur", function () {
-          setTimeout(() => {
-            list.style.display = "none";
-
-            // LOGIC: Jika user mengetik tapi tidak memilih, dan nama yang diketik
-            // TIDAK PERSIS cocok dengan data EMP, izinkan pengisian manual.
-            const exactMatch = EMP.find(
-              (e) => e.name.toLowerCase() === input.value.trim().toLowerCase()
+          if (!response.ok || !result.success) {
+            throw new Error(
+              result.message || "Gagal memuat data menu dari server"
             );
+          }
 
-            if (!exactMatch && input.value.trim().length > 0) {
-              // Asumsi user memasukkan nama baru/salah ketik, biarkan input manual
-              enableManualInput();
-            } else if (exactMatch) {
-              // Jika user mengetik nama yang benar tanpa memilih dari list, kunci input
-              lockInputs();
-            } else if (input.value.trim().length === 0) {
-              // Jika input kosong, reset status input
-              lockInputs();
-              salperIdInput.placeholder = "Will be filled when you pick a name";
-            }
-          }, 200);
-        });
-      }
+          const menuData = result.data || [];
 
-      /**
-       * Memvalidasi data formulir sebelum dikirim.
-       */
-      function validateForm(obj) {
-        if (!obj.salesName) return "Nama Sales wajib diisi.";
+          // 3. Simpan Data Baru ke Local Storage
+          if (menuData.length > 0) {
+            localStorage.setItem(CACHE_KEY_MENU, JSON.stringify(result));
+            localStorage.setItem(
+              LAST_FETCH_TIME_KEY_MENU,
+              new Date().getTime().toString()
+            );
+            console.log("Menu data fetched and cached successfully.");
 
-        if (!obj.salperId)
-          return "ID Salper wajib diisi (pilih dari saran atau input manual).";
+            // ⭐️ Jika fetch berhasil, panggil render ulang untuk update tampilan
+            renderNavigationMenu(menuData);
+            renderMenuCards(menuData);
+            renderFooterLinks(menuData);
+          }
 
-        // --- LOGIC UNTUK MENCEGAH INPUT HANYA '0' ---
-        // 1. Membersihkan string dari semua karakter non-alfanumerik/non-angka.
-        const cleanedSalperId = obj.salperId
-          .trim()
-          .replace(/[^a-zA-Z0-9]/g, "");
-
-        // 2. Mencegah nilai yang tersisa hanya "0".
-        if (cleanedSalperId === "0") {
-          return "ID Salper tidak boleh diisi dengan angka 0 saja, termasuk kombinasi seperti '0-'. Silakan masukkan ID yang valid atau '-' jika tidak ada ID.";
-        }
-        // --------------------------------------------------
-
-        if (!obj.category) return "Kategori wajib dipilih.";
-        if (!obj.promotionTitle) return "Judul Promosi wajib dipilih.";
-        if (!obj.imageData) return "Bukti Screenshot wajib di upload.";
-
-        return "";
-      }
-
-      /**
-       * Mengkompresi dan memproses gambar menggunakan HTML Canvas.
-       * @param {string} base64Data - Data gambar dalam format Base64.
-       * @param {number} quality - Kualitas output JPEG (0.0 hingga 1.0).
-       * @param {number} maxWidth - Ukuran maksimum lebar (opsional, untuk resize).
-       * @returns {Promise<string>} Data gambar Base64 yang sudah dikompresi.
-       */
-      function compressImage(base64Data, quality, maxWidth) {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = function () {
-            let width = img.width;
-            let height = img.height;
-
-            // Jika lebar melebihi batas (resize)
-            if (width > maxWidth) {
-              height = Math.round(height * (maxWidth / width));
-              width = maxWidth;
-            }
-
-            const canvas = document.createElement("canvas");
-            canvas.width = width;
-            canvas.height = height;
-
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, width, height);
-
-            // Output hasil kompresi sebagai JPEG Base64
-            // format: 'image/jpeg' dan kualitas (quality)
-            const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
-            resolve(compressedBase64);
-          };
-          img.src = base64Data;
-        });
-      }
-
-      /**
-       * Mengirim data formulir ke Google Apps Script (GAS).
-       */
-      async function submitToServer(formObj) {
-        try {
-          // ⭐️ FINAL CHECK DAN UPPERCASE (Data sudah di-force uppercase saat input, ini hanya double check)
-          formObj.salesName = formObj.salesName.toUpperCase();
-          formObj.salperId = formObj.salperId.toUpperCase();
-
-          const response = await fetch(GAS_WEB_APP_URL, {
-            method: "POST",
-            body: JSON.stringify(formObj),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            mode: "no-cors",
-          });
-
-          // Karena no-cors, kita anggap sukses jika tidak ada error koneksi
-          return { success: true };
+          return menuData;
         } catch (error) {
-          throw new Error("Submit failed: " + error.message);
+          console.error("Error fetching menu data (BG):", error);
+          if (fallbackData.length === 0) {
+            showError("Gagal memuat data menu: " + error.message);
+          }
+          return fallbackData; // Kembalikan data lama jika ada, atau kosong
         }
       }
 
-      /**
-       * Handler saat tombol submit diklik.
-       */
-      async function onSubmitClick(e) {
-        e.preventDefault();
+      // ----------------------------------------------------
+      // FUNGSI RENDER
+      // ----------------------------------------------------
 
-        const btn = document.getElementById("submitBtn");
-        btn.disabled = true;
-        btn.innerHTML =
-          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+      // Fungsi untuk menampilkan menu di navigation
+      function renderNavigationMenu(menuData) {
+        const navMenu = document.getElementById("navMenu");
+        navMenu.innerHTML = "";
 
-        const formObj = {
-          salesName: salesNameInput.value.trim(),
-          salperId: salperIdInput.value.trim(),
-          category: document.getElementById("category").value,
-          promotionTitle: document.getElementById("promotionTitle").value,
-          comment: document.getElementById("comment").value.trim(),
-          imageData: selectedImageData,
-        };
+        menuData.forEach((menu) => {
+          const isActive = window.location.pathname.endsWith(menu.href);
+          const listItem = document.createElement("li");
+          listItem.className = "nav-item";
 
-        const err = validateForm(formObj);
-        if (err) {
-          btn.disabled = false;
-          btn.textContent = "Submit";
-          Swal.fire({
-            icon: "error",
-            title: "Data Kurang Lengkap!",
-            text: err,
-            confirmButtonText: "OK",
-          });
-          return;
-        }
-
-        try {
-          const res = await submitToServer(formObj);
-
-          btn.disabled = false;
-          btn.textContent = "Submit";
-
-          if (res && res.success) {
-            Swal.fire({
-              icon: "success",
-              title: "Berhasil!",
-              text: "Terima kasih telah update status, Semoga Penjualan anda mencapai target 🤲",
-              confirmButtonText: "AAMIIN",
-              timer: 8000,
-              timerProgressBar: true,
-            }).then(() => {
-              document.getElementById("submissionForm").reset();
-              salperIdInput.value = "";
-              removeImage();
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Gagal Submit!",
-              text:
-                "Error: " + (res && res.message ? res.message : "Server error"),
-              timer: 5000,
-              timerProgressBar: true,
-            });
-          }
-        } catch (err) {
-          btn.disabled = false;
-          btn.textContent = "Submit";
-          Swal.fire({
-            icon: "error",
-            title: "Terjadi Kesalahan!",
-            text: "Submit gagal: " + err.message,
-            timer: 5000,
-            timerProgressBar: true,
-          });
-        }
+          listItem.innerHTML = `
+                <a class="nav-link ${isActive ? "active" : ""}" href="${
+            menu.href
+          }">
+                    ${menu.menu_name}
+                </a>
+            `;
+          navMenu.appendChild(listItem);
+        });
       }
 
-      document.addEventListener("DOMContentLoaded", init);
-    </script>
+      // Fungsi untuk menampilkan cards
+      function renderMenuCards(menuData) {
+        const container = document.getElementById("menuCardsContainer");
+        container.innerHTML = ""; // Clear existing content
 
-    <script>
-      // Blok gesture zoom (pinch)
-      document.addEventListener("gesturestart", function (e) {
-        e.preventDefault();
-      });
+        menuData.forEach((menu) => {
+          const icon = menuIcons[menu.menu_name] || "bi-box";
+          const cardClass = cardClasses[menu.menu_name] || "card-home";
 
-      // Blok double-tap zoom
-      let lastTouchEnd = 0;
-      document.addEventListener(
-        "touchend",
-        function (e) {
-          const now = new Date().getTime();
-          if (now - lastTouchEnd <= 300) {
-            e.preventDefault();
-          }
-          lastTouchEnd = now;
-        },
-        false
-      );
+          const col = document.createElement("div");
+          col.className = "col-md-4";
+
+          col.innerHTML = `
+                <div class="card card-menu ${cardClass}">
+                    <div class="card-body text-center p-4">
+                        <div class="card-icon">
+                            <i class="bi ${icon}"></i>
+                        </div>
+                        <h3 class="card-title h4">${menu.menu_name}</h3>
+                        <p class="card-text text-muted mb-4">
+                            ${menu.captions}
+                        </p>
+                        <a href="${menu.href}" class="btn btn-primary-custom">
+                            <i class="bi ${
+                              icon.split("-")[0]
+                            }-up me-1"></i> Buka ${menu.menu_name}
+                        </a>
+                    </div>
+                </div>
+            `;
+          container.appendChild(col);
+        });
+      }
+
+      // Fungsi untuk menampilkan footer links
+      function renderFooterLinks(menuData) {
+        const footerLinks = document.getElementById("footerLinks");
+        footerLinks.innerHTML = "";
+
+        menuData.forEach((menu) => {
+          const listItem = document.createElement("li");
+          listItem.innerHTML = `<a href="${menu.href}" class="text-light">${menu.menu_name}</a>`;
+          footerLinks.appendChild(listItem);
+        });
+      }
+
+      // Fungsi untuk menampilkan loading
+      function showLoading(show) {
+        const spinner = document.getElementById("loadingSpinner");
+        spinner.style.display = show ? "block" : "none";
+      }
+
+      // Fungsi untuk menampilkan error
+      function showError(message) {
+        const container = document.getElementById("menuCardsContainer");
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger text-center">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    ${message}
+                </div>
+            </div>
+        `;
+      }
+
+      // ----------------------------------------------------
+      // INITIATOR
+      // ----------------------------------------------------
+
+      async function initializeApp() {
+        // Tampilkan loading spinner di awal
+        showLoading(true);
+
+        const menuDataPromise = fetchMenuData();
+        const initialMenuData = await menuDataPromise;
+
+        // 1. Render UI dengan data yang tersedia (baik cache lama atau fetch baru)
+        if (initialMenuData.length > 0) {
+          renderNavigationMenu(initialMenuData);
+          renderMenuCards(initialMenuData);
+          renderFooterLinks(initialMenuData);
+        } else {
+          showError("Data menu tidak ditemukan.");
+        }
+
+        // 2. Sembunyikan loading spinner setelah rendering pertama
+        showLoading(false);
+
+        // ⭐️ Jika data yang dikembalikan adalah data cache lama/expired,
+        // fetchNewMenuData (di dalam fetchMenuData) akan otomatis me-render ulang
+        // secara asinkron. Tidak perlu logic tambahan di sini.
+      }
+
+      // Jalankan ketika DOM siap
+      document.addEventListener("DOMContentLoaded", initializeApp);
     </script>
   </body>
 </html>
