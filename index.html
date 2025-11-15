@@ -288,10 +288,95 @@
       body.dark-mode .hero-big-icon {
         color: #6cb8ff; /* biru neon lembut */
       }
+
+      /* Fullscreen loader (promotion-like) */
+      #page-loader {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        text-align: center;
+      }
+
+      #page-loader .spinner-border {
+        width: 3rem;
+        height: 3rem;
+      }
+
+      #page-loader .progress {
+        width: 260px;
+        height: 10px;
+      }
+
+      /* Efek menghilang */
+      #page-loader.loader-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      /* small helper for hidden elements while preserving layout when needed */
+      .sr-only-inline {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
     </style>
   </head>
 
   <body>
+    <!-- Fullscreen loader (promotion-like) -->
+    <div
+      id="page-loader"
+      class="d-flex flex-column justify-content-center align-items-center"
+      aria-hidden="false"
+    >
+      <div class="spinner-border text-light" role="status" aria-hidden="true">
+        <span class="sr-only-inline">Loading...</span>
+      </div>
+
+      <div
+        id="loading-message"
+        class="text-white mb-1"
+        style="font-size: 0.95rem"
+      >
+        Checking cache...
+      </div>
+
+      <div
+        id="loading-percentage"
+        class="text-white mb-1"
+        style="font-size: 0.85rem; font-weight: 600"
+      >
+        10%
+      </div>
+
+      <div class="progress" style="width: 260px; height: 10px">
+        <div
+          id="loading-progress-bar"
+          class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+          role="progressbar"
+          style="width: 10%"
+          aria-valuenow="10"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
@@ -342,14 +427,6 @@
         >
       </div>
     </section>
-
-    <!-- Loading -->
-    <div id="loadingSpinner" class="loading-spinner">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <p class="mt-2 muted-small">Memuat menu...</p>
-    </div>
 
     <!-- Menu Cards -->
     <section id="menu-cards" class="container mb-5">
@@ -428,8 +505,50 @@
         "guidance material": "card-guidance",
       };
 
-      // ---------- fetch menu data with cache ----------
+      // ---------- Loader helpers ----------
+      function updateLoader(message, finalProgress, duration = 400) {
+        const msg = document.getElementById("loading-message");
+        const bar = document.getElementById("loading-progress-bar");
+        const pct = document.getElementById("loading-percentage");
+
+        if (msg) msg.textContent = message;
+
+        if (!bar) return;
+
+        let current = parseFloat(bar.getAttribute("aria-valuenow") || 0);
+
+        // Prevent going backwards
+        if (finalProgress < current) finalProgress = current;
+
+        const step = (finalProgress - current) / (duration / 50 || 8);
+
+        const interval = setInterval(() => {
+          current += step;
+          if (current >= finalProgress) {
+            current = finalProgress;
+            clearInterval(interval);
+          }
+          bar.style.width = Math.round(current) + "%";
+          bar.setAttribute("aria-valuenow", Math.round(current));
+          if (pct) pct.textContent = Math.round(current) + "%";
+        }, 50);
+      }
+
+      function hideLoader() {
+        updateLoader("Done!", 100, 300);
+        const loader = document.getElementById("page-loader");
+        if (!loader) return;
+        loader.classList.add("loader-hidden");
+        setTimeout(() => {
+          if (loader && loader.parentNode)
+            loader.parentNode.removeChild(loader);
+        }, 500);
+      }
+
+      // ---------- fetch menu data with cache (connected to loader) ----------
       async function fetchMenuData() {
+        updateLoader("Checking cache...", 15);
+
         const cached = localStorage.getItem(CACHE_KEY_MENU);
         const last = localStorage.getItem(LAST_FETCH_TIME_KEY_MENU);
         const now = Date.now();
@@ -441,9 +560,11 @@
             fallback = parsed.data || [];
             const age = now - parseInt(last, 10);
             if (fallback.length && age < CACHE_EXPIRY_MS) {
-              // quick return from cache
+              updateLoader("Loaded from cache", 55);
+              // render immediately from cache to speed perceived load
               renderNavigationMenu(fallback);
               renderMenuCards(fallback);
+              renderFooterLinks(fallback);
               return fallback;
             }
           } catch (e) {
@@ -451,19 +572,25 @@
           }
         }
 
-        // fetch new
         return fetchNewMenuData(fallback);
       }
 
       async function fetchNewMenuData(fallback = []) {
-        showLoading(true);
+        updateLoader("Connecting to server...", 35);
+
         try {
           const res = await fetch(`${GAS_WEB_APP_URL}?action=get_menu`);
-          const json = await res.json();
+          updateLoader("Receiving data...", 60);
 
-          if (!res.ok || !json.success) {
+          if (!res.ok) {
+            throw new Error("HTTP status " + res.status);
+          }
+          const json = await res.json();
+          updateLoader("Processing data...", 75);
+
+          if (!json || !json.success) {
             throw new Error(
-              json.message || "Gagal memuat data menu dari server"
+              json && json.message ? json.message : "Invalid server response"
             );
           }
 
@@ -474,15 +601,18 @@
               LAST_FETCH_TIME_KEY_MENU,
               Date.now().toString()
             );
+            updateLoader("Rendering UI...", 85);
             renderNavigationMenu(data);
             renderMenuCards(data);
+            renderFooterLinks(data);
+          } else {
+            updateLoader("No menu data found", 70);
           }
-          showLoading(false);
+
           return data;
         } catch (err) {
           console.error("Error fetching menu:", err);
           showError("Gagal memuat data menu: " + (err.message || err));
-          showLoading(false);
           return fallback;
         }
       }
@@ -490,6 +620,7 @@
       // ---------- render functions ----------
       function renderNavigationMenu(menuData) {
         const nav = document.getElementById("navMenu");
+        if (!nav) return;
         nav.innerHTML = "";
         menuData.forEach((menu) => {
           const li = document.createElement("li");
@@ -504,12 +635,13 @@
 
       function renderMenuCards(menuData) {
         const container = document.getElementById("menuCardsContainer");
+        if (!container) return;
         container.innerHTML = "";
 
         menuData.forEach((menu, idx) => {
           const key = (menu.menu_name || "").toLowerCase();
           const icon = menuIcons[key] || "bi-box";
-          const cardClass = cardClasses[key] || "card-promotion"; // fallback to promotion look
+          const cardClass = cardClasses[key] || "card-promotion";
 
           const col = document.createElement("div");
           col.className = "col-md-4";
@@ -532,18 +664,28 @@
                 </a>
               </div>
             </div>
-          `;
+            `;
           container.appendChild(col);
         });
       }
 
-      function showLoading(show) {
-        const spinner = document.getElementById("loadingSpinner");
-        spinner.style.display = show ? "block" : "none";
+      function renderFooterLinks(menuData) {
+        const footer = document.querySelector("#footerLinks");
+        if (!footer) {
+          // create fallback small footer links area if not exists (page uses simple footer)
+          return;
+        }
+        footer.innerHTML = "";
+        menuData.forEach((menu) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<a href="${menu.href}" class="text-light">${menu.menu_name}</a>`;
+          footer.appendChild(li);
+        });
       }
 
       function showError(msg) {
         const container = document.getElementById("menuCardsContainer");
+        if (!container) return;
         container.innerHTML = `<div class="col-12"><div class="alert alert-danger text-center">${msg}</div></div>`;
       }
 
@@ -551,7 +693,6 @@
       const themeToggle = document.getElementById("themeToggle");
       const themeIcon = document.getElementById("themeIcon");
 
-      // init theme: prefer localStorage, then prefer-color-scheme
       (function initTheme() {
         const saved = localStorage.getItem("kc_theme");
         if (saved === "dark") {
@@ -561,7 +702,6 @@
           document.body.classList.remove("dark-mode");
           themeIcon.className = "bi bi-moon-stars";
         } else {
-          // auto detect
           const prefersDark =
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -574,22 +714,34 @@
         }
       })();
 
-      themeToggle.addEventListener("click", () => {
-        const isDark = document.body.classList.toggle("dark-mode");
-        localStorage.setItem("kc_theme", isDark ? "dark" : "light");
-        themeIcon.className = isDark
-          ? "bi bi-brightness-high"
-          : "bi bi-moon-stars";
-      });
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          const isDark = document.body.classList.toggle("dark-mode");
+          localStorage.setItem("kc_theme", isDark ? "dark" : "light");
+          themeIcon.className = isDark
+            ? "bi bi-brightness-high"
+            : "bi bi-moon-stars";
+        });
+      }
 
       // ---------- INIT ----------
       async function initializeApp() {
-        showLoading(true);
+        // Start loader flow (will be updated by fetchMenuData)
+        updateLoader("Starting...", 10);
+
         const data = await fetchMenuData();
+
         if (!data || data.length === 0) {
-          showError("Data menu tidak ditemukan.");
+          // show error already handled in fetchNewMenuData
+          updateLoader("No menu found", 80);
+        } else {
+          updateLoader("Finalizing...", 92);
         }
-        showLoading(false);
+
+        // give small delay for UX before hiding
+        setTimeout(() => {
+          hideLoader();
+        }, 350);
       }
 
       document.addEventListener("DOMContentLoaded", initializeApp);
