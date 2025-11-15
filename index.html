@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knowledge Center - Home</title>
+
+    <!-- Bootstrap CSS & Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="asset/css/style.css" />
+    <script src="asset/js/config.js"></script>
+
+    <style>
+      :root {
+        --primary: #102c57;
+        --secondary: #2d6a91;
+        --accent: #4a9dff;
+        --light: #f8f9fa;
+        --dark: #212529;
+
+        /* Light mode card gradients */
+        --promo-grad-1: #ffdce7;
+        --promo-grad-2: #ffb8d2;
+
+        --progress-grad-1: #d1ecff;
+        --progress-grad-2: #9ed6ff;
+
+        --guidance-grad-1: #d4fce7;
+        --guidance-grad-2: #a8e6cf;
+
+        /* Light glass */
+        --glass-bg: rgba(255, 255, 255, 0.6);
+        --glass-border: rgba(255, 255, 255, 0.4);
+      }
+
+      /* Dark Mode Variables */
+      body.dark-mode {
+        --glass-bg: rgba(25, 27, 34, 0.55);
+        --glass-border: rgba(255, 255, 255, 0.08);
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        transition: all 300ms ease;
+        color: #1f1f1f;
+      }
+
+      /* Dark Mode Background */
+      body.dark-mode {
+        background: linear-gradient(135deg, #0f1620 0%, #1a212d 100%);
+        color: #eaf0f8;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: var(--primary);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+      }
+
+      body.dark-mode .navbar {
+        background: #0d1623;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        background: linear-gradient(
+            rgba(16, 44, 87, 0.88),
+            rgba(16, 44, 87, 0.75)
+          ),
+          url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'><rect fill='%23102c57' width='1200' height='800'/><path fill='%232d6a91' d='M0,0 L1200,800 L0,800 Z'/></svg>");
+        background-size: cover;
+        color: #ffffff;
+        padding: 4rem 0;
+        margin-bottom: 2.5rem;
+        border-radius: 0 0 20px 20px;
+      }
+
+      body.dark-mode .hero-section {
+        background: linear-gradient(
+          rgba(10, 20, 35, 0.9),
+          rgba(10, 20, 35, 0.9)
+        );
+      }
+
+      .hero-section .btn {
+        border-radius: 999px;
+      }
+
+      /* Base Card Styling */
+      .card-menu {
+        border: none;
+        border-radius: 18px;
+        padding: 1.25rem;
+        box-shadow: 0 8px 24px rgba(12, 24, 40, 0.08);
+        transition: 260ms ease;
+        height: 100%;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: inherit;
+      }
+
+      .card-menu:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 32px rgba(12, 24, 40, 0.14);
+      }
+
+      .card-icon {
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+        transition: 220ms ease;
+      }
+
+      /* LIGHT MODE COLORED CARDS */
+      .card-promotion {
+        background: linear-gradient(
+          135deg,
+          var(--promo-grad-1),
+          var(--promo-grad-2)
+        );
+        color: #351a22;
+      }
+      .card-progress {
+        background: linear-gradient(
+          135deg,
+          var(--progress-grad-1),
+          var(--progress-grad-2)
+        );
+        color: #0a2e45;
+      }
+      .card-guidance {
+        background: linear-gradient(
+          135deg,
+          var(--guidance-grad-1),
+          var(--guidance-grad-2)
+        );
+        color: #064a37;
+      }
+
+      /* ICON COLORS (light mode) */
+      .card-promotion .card-icon {
+        color: #c2185b;
+      }
+      .card-progress .card-icon {
+        color: #0b6ea3;
+      }
+      .card-guidance .card-icon {
+        color: #0f9d58;
+      }
+
+      /* DARK MODE CARDS (neon subtle) */
+      body.dark-mode .card-menu {
+        color: #e9eef5 !important;
+      }
+
+      body.dark-mode .card-promotion {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 110, 150, 0.16),
+          rgba(255, 90, 130, 0.12)
+        );
+      }
+      body.dark-mode .card-progress {
+        background: linear-gradient(
+          135deg,
+          rgba(80, 160, 255, 0.16),
+          rgba(60, 140, 235, 0.12)
+        );
+      }
+      body.dark-mode .card-guidance {
+        background: linear-gradient(
+          135deg,
+          rgba(90, 255, 190, 0.16),
+          rgba(60, 220, 160, 0.12)
+        );
+      }
+
+      /* DARK MODE ICON COLORS */
+      body.dark-mode .card-promotion .card-icon {
+        color: #ff7fa7;
+      }
+      body.dark-mode .card-progress .card-icon {
+        color: #5abaff;
+      }
+      body.dark-mode .card-guidance .card-icon {
+        color: #63ffcf;
+      }
+
+      /* Buttons */
+      .btn-primary-custom {
+        color: #fff;
+        background: var(--primary);
+        border-radius: 999px;
+        padding: 0.45rem 1.25rem;
+        transition: 200ms;
+      }
+
+      .btn-primary-custom:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+      }
+
+      body.dark-mode .btn-primary-custom {
+        background: #1f6feb;
+      }
+      body.dark-mode .btn-primary-custom:hover {
+        background: #388bfd;
+      }
+
+      /* Feature highlight */
+      .feature-highlight {
+        background: rgba(255, 255, 255, 0.92);
+        padding: 1.75rem;
+        border-radius: 14px;
+      }
+
+      body.dark-mode .feature-highlight {
+        background: rgba(255, 255, 255, 0.05);
+        color: #e9eef5;
+      }
+
+      body.dark-mode .text-muted {
+        color: rgb(255 255 255 / 65%) !important;
+      }
+
+      .footer {
+        background: rgba(0, 0, 0, 0.05);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      body.dark-mode .footer {
+        background: rgba(255, 255, 255, 0.04);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      /* Text utilities */
+      .muted-small {
+        color: rgba(0, 0, 0, 0.6);
+      }
+      body.dark-mode .muted-small {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* Animations */
+      .card-appear {
+        animation: popIn 420ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+      }
+
+      @keyframes popIn {
+        from {
+          transform: translateY(12px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 767px) {
+        .hero-section {
+          padding: 2.5rem 1rem;
+        }
+      }
+
+      /* Hero icon default already uses var(--primary) */
+      .hero-big-icon {
+        color: var(--primary);
+      }
+
+      /* Dark mode override → jadi lebih terang */
+      body.dark-mode .hero-big-icon {
+        color: #6cb8ff; /* biru neon lembut */
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <i
+            class="bi bi-journal-bookmark-fill me-2"
+            style="font-size: 1.6rem"
+          ></i>
+          <span class="fw-bold">Knowledge Center</span>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto me-2" id="navMenu"></ul>
+
+          <!-- Theme Toggle -->
+          <div class="d-flex align-items-center">
+            <button
+              class="btn btn-sm btn-light"
+              id="themeToggle"
+              aria-label="Toggle theme"
+            >
+              <i class="bi bi-moon-stars" id="themeIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-section">
+      <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-2">Sales & Store Knowledge Center</h1>
+        <p class="lead mb-3">
+          Platform terpadu untuk meningkatkan pengetahuan sales person dan
+          informasi store terkini
+        </p>
+        <a href="#menu-cards" class="btn btn-light btn-lg px-4"
+          ><i class="bi bi-arrow-down-circle me-2"></i>Explore Menu</a
+        >
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div id="loadingSpinner" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 muted-small">Memuat menu...</p>
+    </div>
+
+    <!-- Menu Cards -->
+    <section id="menu-cards" class="container mb-5">
+      <div class="row g-4" id="menuCardsContainer"></div>
+    </section>
+
+    <!-- Feature highlight -->
+    <section class="container">
+      <div class="feature-highlight">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h2 class="h4 mb-2">Tingkatkan Pengetahuan & Performa Tim Sales</h2>
+            <p class="muted-small mb-3">
+              Knowledge Center ini dirancang untuk mendukung perkembangan
+              pengetahuan sales person dan menyediakan informasi store terbaru.
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Materi Terupdate</span
+              >
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Akses Mudah</span
+              >
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Interface
+                Responsif</span
+              >
+              <span class="badge bg-primary p-2"
+                ><i class="bi bi-check-circle me-1"></i> Data Real-time</span
+              >
+            </div>
+          </div>
+
+          <div class="col-md-4 text-center">
+            <i
+              class="bi bi-bar-chart-fill hero-big-icon"
+              style="font-size: 4.5rem"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-3">
+      <div class="container text-center">
+        <p class="mb-0 muted-small">
+          Created by <strong>Admin Cibubur</strong>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // ===== CONFIG =====
+      const GAS_WEB_APP_URL = GLOBAL_CONFIG.GAS_WEB_APP_URL;
+
+      // caching keys
+      const CACHE_KEY_MENU = "routingMenuData";
+      const LAST_FETCH_TIME_KEY_MENU = "lastFetchTimeMenu";
+      const CACHE_EXPIRY_MS = 60 * 60 * 1000; // 1 hour
+
+      // icon mapping (keys in lowercase for robustness)
+      const menuIcons = {
+        "promotion form": "bi-ui-checks-grid",
+        "dashboard progress": "bi-graph-up-arrow",
+        "guidance material": "bi-journal-text",
+      };
+
+      // card classes mapping (lowercase)
+      const cardClasses = {
+        "promotion form": "card-promotion",
+        "dashboard progress": "card-progress",
+        "guidance material": "card-guidance",
+      };
+
+      // ---------- fetch menu data with cache ----------
+      async function fetchMenuData() {
+        const cached = localStorage.getItem(CACHE_KEY_MENU);
+        const last = localStorage.getItem(LAST_FETCH_TIME_KEY_MENU);
+        const now = Date.now();
+        let fallback = [];
+
+        if (cached && last) {
+          try {
+            const parsed = JSON.parse(cached);
+            fallback = parsed.data || [];
+            const age = now - parseInt(last, 10);
+            if (fallback.length && age < CACHE_EXPIRY_MS) {
+              // quick return from cache
+              renderNavigationMenu(fallback);
+              renderMenuCards(fallback);
+              return fallback;
+            }
+          } catch (e) {
+            console.warn("Invalid cache, fetching new.");
+          }
+        }
+
+        // fetch new
+        return fetchNewMenuData(fallback);
+      }
+
+      async function fetchNewMenuData(fallback = []) {
+        showLoading(true);
+        try {
+          const res = await fetch(`${GAS_WEB_APP_URL}?action=get_menu`);
+          const json = await res.json();
+
+          if (!res.ok || !json.success) {
+            throw new Error(
+              json.message || "Gagal memuat data menu dari server"
+            );
+          }
+
+          const data = json.data || [];
+          if (data.length) {
+            localStorage.setItem(CACHE_KEY_MENU, JSON.stringify(json));
+            localStorage.setItem(
+              LAST_FETCH_TIME_KEY_MENU,
+              Date.now().toString()
+            );
+            renderNavigationMenu(data);
+            renderMenuCards(data);
+          }
+          showLoading(false);
+          return data;
+        } catch (err) {
+          console.error("Error fetching menu:", err);
+          showError("Gagal memuat data menu: " + (err.message || err));
+          showLoading(false);
+          return fallback;
+        }
+      }
+
+      // ---------- render functions ----------
+      function renderNavigationMenu(menuData) {
+        const nav = document.getElementById("navMenu");
+        nav.innerHTML = "";
+        menuData.forEach((menu) => {
+          const li = document.createElement("li");
+          li.className = "nav-item";
+          const isActive = location.pathname.endsWith(menu.href);
+          li.innerHTML = `<a class="nav-link ${
+            isActive ? "active" : ""
+          }" href="${menu.href}">${menu.menu_name}</a>`;
+          nav.appendChild(li);
+        });
+      }
+
+      function renderMenuCards(menuData) {
+        const container = document.getElementById("menuCardsContainer");
+        container.innerHTML = "";
+
+        menuData.forEach((menu, idx) => {
+          const key = (menu.menu_name || "").toLowerCase();
+          const icon = menuIcons[key] || "bi-box";
+          const cardClass = cardClasses[key] || "card-promotion"; // fallback to promotion look
+
+          const col = document.createElement("div");
+          col.className = "col-md-4";
+
+          col.innerHTML = `
+            <div class="card card-menu ${cardClass} card-appear" style="animation-delay:${Math.min(
+            200 * idx,
+            600
+          )}ms">
+              <div class="card-body text-center p-4 d-flex flex-column align-items-center">
+                <div class="card-icon"><i class="bi ${icon}"></i></div>
+                <h3 class="card-title h5 text-center">${menu.menu_name}</h3>
+                <p class="card-text text-muted mb-3">${menu.captions || ""}</p>
+                <a href="${
+                  menu.href
+                }" class="btn btn-primary-custom mt-auto" aria-label="Open ${
+            menu.menu_name
+          }">
+                  <i class="bi ${icon} me-1"></i> Buka
+                </a>
+              </div>
+            </div>
+          `;
+          container.appendChild(col);
+        });
+      }
+
+      function showLoading(show) {
+        const spinner = document.getElementById("loadingSpinner");
+        spinner.style.display = show ? "block" : "none";
+      }
+
+      function showError(msg) {
+        const container = document.getElementById("menuCardsContainer");
+        container.innerHTML = `<div class="col-12"><div class="alert alert-danger text-center">${msg}</div></div>`;
+      }
+
+      // ---------- Theme / Dark Mode ----------
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+
+      // init theme: prefer localStorage, then prefer-color-scheme
+      (function initTheme() {
+        const saved = localStorage.getItem("kc_theme");
+        if (saved === "dark") {
+          document.body.classList.add("dark-mode");
+          themeIcon.className = "bi bi-brightness-high";
+        } else if (saved === "light") {
+          document.body.classList.remove("dark-mode");
+          themeIcon.className = "bi bi-moon-stars";
+        } else {
+          // auto detect
+          const prefersDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (prefersDark) {
+            document.body.classList.add("dark-mode");
+            themeIcon.className = "bi bi-brightness-high";
+          } else {
+            themeIcon.className = "bi bi-moon-stars";
+          }
+        }
+      })();
+
+      themeToggle.addEventListener("click", () => {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("kc_theme", isDark ? "dark" : "light");
+        themeIcon.className = isDark
+          ? "bi bi-brightness-high"
+          : "bi bi-moon-stars";
+      });
+
+      // ---------- INIT ----------
+      async function initializeApp() {
+        showLoading(true);
+        const data = await fetchMenuData();
+        if (!data || data.length === 0) {
+          showError("Data menu tidak ditemukan.");
+        }
+        showLoading(false);
+      }
+
+      document.addEventListener("DOMContentLoaded", initializeApp);
+    </script>
+  </body>
+</html>
