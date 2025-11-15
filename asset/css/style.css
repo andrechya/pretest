@@ -402,7 +402,7 @@ h5 {
   }
 
   body {
-    padding: 10 !important;
+    padding: 10px !important;
     margin: 0 !important;
   }
 
@@ -410,3 +410,4 @@ h5 {
     flex-direction: column;
   }
 }
+
