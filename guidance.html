@@ -4,18 +4,15 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-    />
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Guidance Menu</title>
     <script src="asset/js/config.js"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
-    />
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="asset/css/style.css" />
     <style>
       :root {
@@ -109,18 +106,8 @@
         max-width: 800px;
         width: 90%;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        animation: modalFadeIn 0.3s;
       }
-      @keyframes modalFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+
       .modal-header {
         background-color: var(--accent);
         color: white;
@@ -241,14 +228,97 @@
           margin: 1rem auto;
         }
       }
+
+      /* 7. PDF WRAPPER & IMAGE (Seamless Look) */
+      .pdf-wrapper {
+        position: relative;
+        width: 100%;
+        height: 80vh;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+      }
+      .pdf-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+      }
+      .pdf-action-bar {
+        display: flex;
+        justify-content: flex-end;
+        padding: 12px 0;
+        border-top: 1px solid #f0f0f0;
+        margin-top: 10px;
+      }
+
+      .modal-backdrop.show {
+        backdrop-filter: blur(5px);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      /* ANIMASI MODAL (Zoom + Bounce) */
+      @keyframes modalFadeZoomBounce {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        55% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        75% {
+          transform: scale(0.97);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .modal.show .modal-dialog {
+        animation: modalFadeZoomBounce 0.4s ease-out;
+      }
+
+      /* ANIMASI STATIC BACKDROP (GETAR) */
+      @keyframes staticBackdrop {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .modal-static-anim {
+        animation: staticBackdrop 0.3s ease-in-out;
+      }
+
+      /* ANIMASI SCROLLBAR */
+      .modal-content::-webkit-scrollbar {
+        width: 6px;
+      }
+      .modal-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+      .modal-content::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+      }
+      .modal-content::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+      }
     </style>
   </head>
   <body>
     <div class="container py-4">
       <div class="card card-custom">
         <div
-          class="header-bg d-flex justify-content-between align-items-center"
-        >
+          class="header-bg d-flex justify-content-between align-items-center">
           <h1 class="card-title h4 mb-0">Guidance Material Menu</h1>
           <a href="index.html" class="btn btn-sm btn-outline-light"
             ><i class="bi bi-house"></i> Home</a
@@ -283,22 +353,18 @@
           <div
             id="loadingStatus"
             class="small text-muted text-center mt-3"
-            style="display: none"
-          ></div>
+            style="display: none"></div>
         </div>
       </div>
     </div>
 
-    <!-- Modal untuk menampilkan konten detail -->
     <div id="contentModal" class="content-modal">
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title" id="modalTitle">Judul Panduan</h2>
           <button class="close-btn" id="closeModal">&times;</button>
         </div>
-        <div class="modal-body" id="modalBody">
-          <!-- Konten akan diisi secara dinamis -->
-        </div>
+        <div class="modal-body" id="modalBody"></div>
       </div>
     </div>
 
@@ -307,6 +373,28 @@
     <script>
       // ⭐️ GANTI INI DENGAN URL DEPLOYMENT GAS ANDA
       const GAS_WEB_APP_URL = GLOBAL_CONFIG.GAS_WEB_APP_URL;
+
+      window.handleMediaError = function (imgElement, fileId) {
+        const container = imgElement.parentElement;
+        const pdfUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+
+        container.innerHTML = `
+        <div class="pdf-wrapper">
+           <iframe src="${pdfUrl}" class="pdf-frame" allow="autoplay"></iframe>
+        </div>
+        <div class="pdf-action-bar">
+           <a href="https://drive.google.com/file/d/${fileId}/view" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill px-4">
+             <i class="bi bi-arrows-fullscreen"></i> Fullscreen / Download
+           </a>
+        </div>
+      `;
+      };
+
+      function getDriveId(url) {
+        if (!url) return null;
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        return match ? match[1] : null;
+      }
 
       let ALL_GUIDANCE_DATA = null;
       let ALL_CARD_NAMES = [];
@@ -530,47 +618,74 @@
       // ----------------------------------------------------
       // E. FUNGSI UNTUK MENAMPILKAN DETAIL SUB-TITLE
       // ----------------------------------------------------
-      function showSubtitleDetail(cardName, connection, subTitle) {
+      window.showSubtitleDetail = function (cardName, connection, subTitle) {
         const cardData = ALL_GUIDANCE_DATA[cardName];
         const conn = cardData.connections[connection];
         const guidances = conn.items[subTitle];
 
-        // Buat konten detail
         let detailHtml = `
-          <button class="back-btn" id="backToSubtitleList">
-            <i class="bi bi-arrow-left"></i> Back to List
-          </button>
-          <div class="detail-title">${subTitle}</div>
-        `;
-
-        // Loop melalui setiap guidance item
-        guidances.forEach((g) => {
-          if (g.text) {
-            detailHtml += `<div class="guidance-text">${g.text}</div>`;
-          }
-          if (g.img) {
-            detailHtml += `<img src="${g.img}" class="guidance-img mb-2" alt="Guidance Image">`;
-          }
-        });
-
-        // Ganti konten modal dengan detail
-        modalBody.innerHTML = `
-          <div id="contentDetail" class="content-detail">
-            ${detailHtml}
+          <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+            <button class="back-btn me-3" onclick="showConnectionContent('${cardName}', '${connection}')" title="Back">
+                <i class="bi bi-arrow-left-circle-fill" style="font-size: 1.5rem;"></i>
+            </button>
+            <h4 class="m-0 fw-bold" style="color:var(--primary-color)">${subTitle}</h4>
           </div>
         `;
 
-        // Tampilkan konten detail
-        document.getElementById("contentDetail").style.display = "block";
+        guidances.forEach((g) => {
+          // Text
+          if (g.text)
+            detailHtml += `<div class="guidance-text mb-4">${g.text}</div>`;
 
-        // Tambahkan event listener untuk tombol back
-        document
-          .getElementById("backToSubtitleList")
-          .addEventListener("click", function () {
-            // Kembali ke list sub-title
-            showConnectionContent(cardName, connection);
-          });
-      }
+          // Media
+          if (g.img) {
+            const url = g.img.trim();
+            const fileId = getDriveId(url);
+            const fileType = (g.type || "img").toLowerCase();
+
+            if (fileType === "pdf") {
+              // PDF Handling
+              let pdfSrc = url;
+              if (fileId) {
+                pdfSrc = `https://drive.google.com/file/d/${fileId}/preview`;
+              }
+
+              detailHtml += `
+                  <div class="pdf-wrapper">
+                     <iframe src="${pdfSrc}" class="pdf-frame" allow="autoplay"></iframe>
+                  </div>
+                  <div class="pdf-action-bar">
+                     <a href="${url}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-4">
+                       <i class="bi bi-box-arrow-up-right"></i> Open PDF in New Tab
+                     </a>
+                  </div>`;
+            } else {
+              // Image Handling
+              let imgSrc = url;
+              if (fileId) {
+                // High-Res Thumbnail
+                imgSrc = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
+              }
+
+              detailHtml += `
+                 <div class="text-center mb-4">
+                   <img 
+                     src="${imgSrc}" 
+                     class="img-fluid rounded shadow-sm" 
+                     style="max-height: 80vh; width: auto; max-width: 100%; object-fit: contain;"
+                     alt="Guidance Image" 
+                     loading="lazy"
+                   />
+                 </div>
+               `;
+            }
+          }
+        });
+
+        modalBody.innerHTML = detailHtml;
+        // Scroll modal to top
+        modalBody.scrollTop = 0;
+      };
 
       // ----------------------------------------------------
       // F. EVENT LISTENERS & INIT
@@ -589,10 +704,19 @@
           contentModal.style.display = "none";
         });
 
-        // Tutup modal ketika klik di luar konten modal
+        // ⭐️ LOGIKA BARU: STATIC BACKDROP EFFECT (Getar saat klik luar)
         contentModal.addEventListener("click", function (e) {
           if (e.target === contentModal) {
-            contentModal.style.display = "none";
+            // Ambil elemen konten di dalam modal
+            const modalBox = contentModal.querySelector(".modal-content");
+
+            // Tambahkan class animasi
+            modalBox.classList.add("modal-static-anim");
+
+            // Hapus class setelah animasi selesai (300ms sesuai CSS)
+            setTimeout(() => {
+              modalBox.classList.remove("modal-static-anim");
+            }, 300);
           }
         });
 
